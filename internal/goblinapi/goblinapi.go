@@ -34,32 +34,35 @@ type Item struct {
 	HighAlch int    `json:"highalch"`
 }
 
-func (c *Client) FetchMappings() ([]Item, error) {
-	var result []Item
+func fetch[T any](gobClient *Client, url string) (T, error) {
+	var result T
 
-	req, err := http.NewRequestWithContext(context.Background(), "GET", mappings, nil)
+	req, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
 	if err != nil {
-		return nil, err
+		return result, err
 	}
 
-	req.Header.Add("User-Agent", c.userAgent)
+	req.Header.Add("User-Agent", gobClient.userAgent)
 
-	res, err := c.httpClient.Do(req)
+	res, err := gobClient.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return result, err
 	}
 
 	defer res.Body.Close()
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return result, err
 	}
 
 	err = json.Unmarshal(data, &result)
-	if err != nil {
-		return nil, err
-	}
 
-	return result, nil
+	return result, err
+}
+
+func (c *Client) FetchMappings() ([]Item, error) {
+	url := mappings
+
+	return fetch[[]Item](c, url)
 }
