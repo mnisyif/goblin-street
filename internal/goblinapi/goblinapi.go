@@ -15,6 +15,12 @@
 // Package goblinapi is meant to talk with the osrs wiki api and retrieve data on osrs items
 package goblinapi
 
+import (
+	"context"
+	"encoding/json"
+	"io"
+	"net/http"
+)
 
 type Item struct {
 	ID       int    `json:"id"`
@@ -26,4 +32,34 @@ type Item struct {
 	Limit    int    `json:"limit"`
 	LowAlch  int    `json:"lowalch"`
 	HighAlch int    `json:"highalch"`
+}
+
+func (c *Client) FetchMappings() ([]Item, error) {
+	var result []Item
+
+	req, err := http.NewRequestWithContext(context.Background(), "GET", mappings, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", c.userAgent)
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
