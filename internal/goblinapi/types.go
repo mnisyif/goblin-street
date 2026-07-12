@@ -31,8 +31,8 @@ type LatestPrices struct {
 }
 
 type PriceEntry struct {
-	High     int `json:"high"`
-	Low      int `json:"low"`
-	HighTime int `json:"hightime"`
-	LowTime  int `json:"lowtime"`
+	Buy      int `json:"high"`
+	Sell     int `json:"low"`
+	BuyTime  int `json:"hightime"`
+	SellTime int `json:"lowtime"`
 }
