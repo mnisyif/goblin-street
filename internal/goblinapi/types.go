@@ -25,3 +25,14 @@ type Item struct {
 	LowAlch  int    `json:"lowalch"`
 	HighAlch int    `json:"highalch"`
 }
+
+type LatestPrices struct {
+	Data map[int]PriceEntry `json:"data"`
+}
+
+type PriceEntry struct {
+	High     int `json:"high"`
+	Low      int `json:"low"`
+	HighTime int `json:"hightime"`
+	LowTime  int `json:"lowtime"`
+}

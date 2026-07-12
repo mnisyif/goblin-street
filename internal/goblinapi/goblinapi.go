@@ -54,3 +54,8 @@ func (c *Client) FetchMappings() ([]Item, error) {
 
 	return fetch[[]Item](c, url)
 }
+
+func (c *Client) FetchLatestAll() (LatestPrices, error) {
+	url := latest
+	return fetch[LatestPrices](c, url)
+}
