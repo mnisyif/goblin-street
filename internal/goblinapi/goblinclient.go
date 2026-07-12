@@ -14,16 +14,21 @@
 
 package goblinapi
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type Client struct {
 	httpClient http.Client
 	userAgent  string
+	ctx        context.Context
 }
 
 func New(userAgent string) Client {
 	return Client{
 		httpClient: http.Client{},
 		userAgent:  userAgent,
+		ctx:        context.Background(),
 	}
 }

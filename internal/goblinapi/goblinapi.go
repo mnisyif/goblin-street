@@ -16,7 +16,6 @@
 package goblinapi
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -25,7 +24,7 @@ import (
 func fetch[T any](gobClient *Client, url string) (T, error) {
 	var result T
 
-	req, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
+	req, err := http.NewRequestWithContext(gobClient.ctx, "GET", url, nil)
 	if err != nil {
 		return result, err
 	}
