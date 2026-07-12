@@ -22,18 +22,6 @@ import (
 	"net/http"
 )
 
-type Item struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Examine  string `json:"examine"`
-	Members  bool   `json:"members"`
-	Icon     string `json:"icon"`
-	Value    int    `json:"value"`
-	Limit    int    `json:"limit"`
-	LowAlch  int    `json:"lowalch"`
-	HighAlch int    `json:"highalch"`
-}
-
 func fetch[T any](gobClient *Client, url string) (T, error) {
 	var result T
 
