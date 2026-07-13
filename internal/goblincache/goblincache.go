@@ -35,6 +35,8 @@ func New(interval time.Duration) (*Cache, error) {
 		cacheMap: make(map[string]cacheEntry),
 		mu:       &sync.Mutex{},
 	}
+
+	go newCache.reapLoop(interval)
 	return newCache, nil
 }
 
@@ -58,4 +60,17 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	result, exists := c.cacheMap[key]
 
 	return result.val, exists
+}
+
+func (c *Cache) reapLoop(interval time.Duration) {
+	for {
+		time.Sleep(interval)
+		c.mu.Lock()
+		for key, entry := range c.cacheMap {
+			if time.Since(entry.createdAt) > interval {
+				delete(c.cacheMap, key)
+			}
+		}
+		c.mu.Unlock()
+	}
 }
