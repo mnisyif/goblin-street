@@ -20,6 +20,7 @@ import (
 	"strconv"
 
 	"github.com/mnisyif/goblin-street/internal/goblinapi"
+	"github.com/mnisyif/goblin-street/internal/goblinengine"
 )
 
 func main() {
@@ -34,15 +35,27 @@ func main() {
 
 	fmt.Printf("Item name: %s\n", items[0].Name)
 
+	// avgPrices, err := goblinClient.FetchLatest()
 	avgPrices, err := goblinClient.Fetch1Hour()
 	if err != nil {
 		fmt.Printf("Could not fetch prices of last hour: %s", err)
 		os.Exit(1)
 	}
 
-	id := strconv.Itoa(items[0].ID)
-	fmt.Printf("Avg Buy: %d\n", avgPrices.Data[id].AvgBuy)
-	fmt.Printf("Avg Sell: %d\n", avgPrices.Data[id].AvgSell)
-	fmt.Printf("Buy Volume: %d\n", avgPrices.Data[id].BuyVolume)
-	fmt.Printf("Sell Volume: %d\n", avgPrices.Data[id].SellVolume)
+	id := strconv.Itoa(items[10].ID)
+	entry, ok := avgPrices.Data[id]
+	if !ok {
+		fmt.Printf("Item %s not traded recently\n", items[10].Name)
+		return
+	}
+
+	fmt.Printf("Item: %v\n", entry)
+	profit := goblinengine.ProfitGP(entry.AvgSell, entry.AvgBuy)
+	roi := goblinengine.ROI(entry.AvgSell, entry.AvgBuy)
+	margin := goblinengine.MarginPct(entry.AvgSell, entry.AvgBuy)
+
+	fmt.Printf("Item: %s\n", items[0].Name)
+	fmt.Printf("Profit per item: %d gp\n", profit)
+	fmt.Printf("ROI: %.2f%%\n", roi)
+	fmt.Printf("Margin: %.2f%%\n", margin)
 }
