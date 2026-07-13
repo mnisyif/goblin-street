@@ -59,7 +59,7 @@ func (c *Client) FetchMappings() ([]Item, error) {
 	return fetch[[]Item](c, url)
 }
 
-func (c *Client) FetchLatestAll() (LatestPrices, error) {
+func (c *Client) FetchLatest() (LatestPrices, error) {
 	url := fmt.Sprintf("%s/latest", baseURL)
 
 	return fetch[LatestPrices](c, url)
