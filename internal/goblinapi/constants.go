@@ -15,6 +15,5 @@
 package goblinapi
 
 const (
-	mappings = "https://prices.runescape.wiki/api/v1/osrs/mapping"
-	latest   = "https://prices.runescape.wiki/api/v1/osrs/latest"
+	baseURL = "https://prices.runescape.wiki/api/v1/osrs"
 )

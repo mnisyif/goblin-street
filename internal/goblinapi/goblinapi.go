@@ -49,12 +49,13 @@ func fetch[T any](gobClient *Client, url string) (T, error) {
 }
 
 func (c *Client) FetchMappings() ([]Item, error) {
-	url := mappings
+	url := fmt.Sprintf("%s/mapping", baseURL)
 
 	return fetch[[]Item](c, url)
 }
 
 func (c *Client) FetchLatestAll() (LatestPrices, error) {
-	url := latest
+	url := fmt.Sprintf("%s/latest", baseURL)
+
 	return fetch[LatestPrices](c, url)
 }
