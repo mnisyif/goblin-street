@@ -17,6 +17,7 @@ package goblinapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -34,6 +35,10 @@ func fetch[T any](gobClient *Client, url string) (T, error) {
 	res, err := gobClient.httpClient.Do(req)
 	if err != nil {
 		return result, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return result, fmt.Errorf("API returned %d", res.StatusCode)
 	}
 
 	defer res.Body.Close()
