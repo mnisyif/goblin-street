@@ -24,6 +24,9 @@ func ProfitGP(buyPrice, sellPrice int) int {
 }
 
 func ROI(buyPrice, sellPrice int) float64 {
+	if buyPrice == 0 {
+		return 0.0
+	}
 	return float64(ProfitGP(buyPrice, sellPrice)) / float64(buyPrice) * 100
 }
 
