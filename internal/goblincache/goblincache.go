@@ -37,3 +37,25 @@ func New(interval time.Duration) (*Cache, error) {
 	}
 	return newCache, nil
 }
+
+func (c *Cache) Add(key string, val []byte) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	newEntry := cacheEntry{
+		createdAt: time.Now(),
+		val:       val,
+	}
+	c.cacheMap[key] = newEntry
+
+	return nil
+}
+
+func (c *Cache) Get(key string) ([]byte, bool) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	result, exists := c.cacheMap[key]
+
+	return result.val, exists
+}
