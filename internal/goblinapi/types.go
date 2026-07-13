@@ -27,12 +27,12 @@ type Item struct {
 }
 
 type LatestPrices struct {
-	Data map[int]PriceEntry `json:"data"`
+	Data map[string]PriceEntry `json:"data"`
 }
 
 type PriceEntry struct {
 	Buy      int `json:"high"`
 	Sell     int `json:"low"`
-	BuyTime  int `json:"hightime"`
-	SellTime int `json:"lowtime"`
+	BuyTime  int `json:"highTime"`
+	SellTime int `json:"lowTime"`
 }
