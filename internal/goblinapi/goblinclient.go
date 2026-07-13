@@ -25,8 +25,8 @@ type Client struct {
 	ctx        context.Context
 }
 
-func New(userAgent string) Client {
-	return Client{
+func New(userAgent string) *Client {
+	return &Client{
 		httpClient: http.Client{},
 		userAgent:  userAgent,
 		ctx:        context.Background(),
