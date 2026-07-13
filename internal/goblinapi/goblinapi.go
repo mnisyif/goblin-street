@@ -64,3 +64,9 @@ func (c *Client) FetchLatestAll() (LatestPrices, error) {
 
 	return fetch[LatestPrices](c, url)
 }
+
+func (c *Client) Fetch5Min() (AveragePrices, error) {
+	url := fmt.Sprintf("%s/5m", baseURL)
+
+	return fetch[AveragePrices](c, url)
+}

@@ -36,3 +36,14 @@ type PriceEntry struct {
 	BuyTime  int `json:"highTime"`
 	SellTime int `json:"lowTime"`
 }
+
+type AveragePrices struct {
+	Data map[string]AverageEntry `json:"data"`
+}
+
+type AverageEntry struct {
+	AvgBuy     int `json:"avgHighPrice"`
+	AvgSell    int `json:"avgLowPrice"`
+	BuyVolume  int `json:"highPriceVolume"`
+	SellVolume int `json:"lowPriceVolume"`
+}
