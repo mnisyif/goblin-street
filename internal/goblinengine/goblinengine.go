@@ -22,7 +22,11 @@ func GETax(sellPrice int) int {
 func ProfitGP(buyPrice, sellPrice int) int {
 	return sellPrice - GETax(sellPrice) - buyPrice
 }
+
 func ROI(buyPrice, sellPrice int) float64 {
 	return float64(ProfitGP(buyPrice, sellPrice)) / float64(buyPrice) * 100
 }
 
+func MarginPct(buyPrice, sellPrice int) float64 {
+	return float64(ProfitGP(buyPrice, sellPrice)) / float64(sellPrice) * 100
+}
