@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/mnisyif/goblin-street/internal/goblinapi"
 )
@@ -32,4 +33,16 @@ func main() {
 	}
 
 	fmt.Printf("Item name: %s\n", items[0].Name)
+
+	avgPrices, err := goblinClient.Fetch1Hour()
+	if err != nil {
+		fmt.Printf("Could not fetch prices of last hour: %s", err)
+		os.Exit(1)
+	}
+
+	id := strconv.Itoa(items[0].ID)
+	fmt.Printf("Avg Buy: %d\n", avgPrices.Data[id].AvgBuy)
+	fmt.Printf("Avg Sell: %d\n", avgPrices.Data[id].AvgSell)
+	fmt.Printf("Buy Volume: %d\n", avgPrices.Data[id].BuyVolume)
+	fmt.Printf("Sell Volume: %d\n", avgPrices.Data[id].SellVolume)
 }
