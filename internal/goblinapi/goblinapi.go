@@ -70,3 +70,9 @@ func (c *Client) Fetch5Min() (AveragePrices, error) {
 
 	return fetch[AveragePrices](c, url)
 }
+
+func (c *Client) Fetch1Hour() (AveragePrices, error) {
+	url := fmt.Sprintf("%s/1h", baseURL)
+
+	return fetch[AveragePrices](c, url)
+}
