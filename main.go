@@ -42,19 +42,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	id := strconv.Itoa(items[10].ID)
-	entry, ok := avgPrices.Data[id]
+	id_int := 10
+	id_str := strconv.Itoa(items[id_int].ID)
+	entry, ok := avgPrices.Data[id_str]
 	if !ok {
-		fmt.Printf("Item %s not traded recently\n", items[10].Name)
+		fmt.Printf("Item %s not traded recently\n", items[id_int].Name)
 		return
 	}
 
 	fmt.Printf("Item: %v\n", entry)
-	profit := goblinengine.ProfitGP(entry.AvgSell, entry.AvgBuy)
-	roi := goblinengine.ROI(entry.AvgSell, entry.AvgBuy)
-	margin := goblinengine.MarginPct(entry.AvgSell, entry.AvgBuy)
+	profit := goblinengine.ProfitGP(entry.AvgBuy, entry.AvgSell)
+	roi := goblinengine.ROI(entry.AvgBuy, entry.AvgSell)
+	margin := goblinengine.MarginPct(entry.AvgBuy, entry.AvgSell)
 
-	fmt.Printf("Item: %s\n", items[0].Name)
+	fmt.Printf("Item: %s\n", items[id_int].Name)
 	fmt.Printf("Profit per item: %d gp\n", profit)
 	fmt.Printf("ROI: %.2f%%\n", roi)
 	fmt.Printf("Margin: %.2f%%\n", margin)
