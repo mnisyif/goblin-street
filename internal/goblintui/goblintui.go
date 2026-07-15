@@ -95,19 +95,19 @@ func (m *Model) View() string {
 
 	if m.ActiveTab == 0 {
 		for i, row := range m.Rows {
-			cursor := " "
+			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += cursor + fmt.Sprintf("%-20s %8d %8d %8d %8f %8d\n", row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
+			s += fmt.Sprintf("%s %-20s %8d %8d %8d %8f %8d\n", cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
 		}
 	} else {
 		for i, history := range m.History {
-			cursor := " "
+			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += cursor + history + "\n"
+			s += fmt.Sprintf("%s %s\n", cursor, history)
 		}
 	}
 
