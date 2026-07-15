@@ -22,33 +22,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type ModelMarket struct {
-	Name   string
-	Buy    int
-	Sell   int
-	Spread int
-	ROI    float64
-	Volume int
-}
-
-type ModelHistory struct {
-	Item      string
-	Qty       int
-	BuyPrice  int
-	SellPrice int
-	Profit    int
-	Date      string
-}
-
-type Model struct {
-	ActiveTab    int
-	Cursor       int
-	ScrollOffset int
-	WindowHeight int
-	Rows         []ModelMarket
-	History      []string
-}
-
 func New(rows []ModelMarket, history []string) *Model {
 	return &Model{
 		ActiveTab:    0,
