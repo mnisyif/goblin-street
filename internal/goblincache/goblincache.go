@@ -60,6 +60,14 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	defer c.mu.Unlock()
 
 	result, exists := c.cacheMap[key]
+	if !exists {
+		return nil, false
+	}
+
+	if time.Since(result.createdAt) > result.ttl {
+		delete(c.cacheMap, key)
+		return nil, false
+	}
 
 	return result.val, exists
 }
