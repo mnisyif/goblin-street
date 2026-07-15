@@ -26,10 +26,12 @@ import (
 func fetchAndCache[T any](gobClient *Client, url string, ttl time.Duration) (T, error) {
 	var result T
 
-	cached, exists := gobClient.cache.Get(url)
-	if exists {
-		err := json.Unmarshal(cached, &result)
-		return result, err
+	if gobClient.cache != nil {
+		cached, exists := gobClient.cache.Get(url)
+		if exists {
+			err := json.Unmarshal(cached, &result)
+			return result, err
+		}
 	}
 
 	req, err := http.NewRequestWithContext(gobClient.ctx, "GET", url, nil)
@@ -55,7 +57,9 @@ func fetchAndCache[T any](gobClient *Client, url string, ttl time.Duration) (T, 
 		return result, err
 	}
 
-	gobClient.cache.Add(url, data, ttl)
+	if gobClient.cache != nil {
+		gobClient.cache.Add(url, data, ttl)
+	}
 
 	err = json.Unmarshal(data, &result)
 
