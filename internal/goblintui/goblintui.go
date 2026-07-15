@@ -41,3 +41,7 @@ func New(rows []ModelRow, history []string) *Model {
 		History:   history,
 	}
 }
+
+func (m *Model) Init() tea.Cmd {
+	return nil
+}
