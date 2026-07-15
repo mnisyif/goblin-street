@@ -31,19 +31,31 @@ type ModelMarket struct {
 	Volume int
 }
 
+type ModelHistory struct {
+	Item      string
+	Qty       int
+	BuyPrice  int
+	SellPrice int
+	Profit    int
+	Date      string
+}
+
 type Model struct {
-	ActiveTab int
-	Cursor    int
-	Rows      []ModelRow
-	History   []string
+	ActiveTab    int
+	Cursor       int
+	ScrollOffset int
+	WindowHeight int
+	Rows         []ModelMarket
+	History      []string
 }
 
 func New(rows []ModelMarket, history []string) *Model {
 	return &Model{
-		ActiveTab: 0,
-		Cursor:    0,
-		Rows:      rows,
-		History:   history,
+		ActiveTab:    0,
+		Cursor:       0,
+		WindowHeight: 10,
+		Rows:         rows,
+		History:      history,
 	}
 }
 
