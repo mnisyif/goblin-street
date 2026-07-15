@@ -94,12 +94,13 @@ func (m *Model) View() string {
 				cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
 		}
 	} else {
-		for i, history := range m.History {
+		s += fmt.Sprintf("%2s %-16s %8s %8s %8s %10s %12s\n", "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
+		for i, entry := range m.History {
 			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += fmt.Sprintf("  %s %s\n", cursor, history)
+			s += fmt.Sprintf("%2s %-16s %8d %8d %8d %10d %12s\n", cursor, entry.Item, entry.Qty, entry.BuyPrice, entry.SellPrice, entry.Profit, entry.Date)
 		}
 	}
 
