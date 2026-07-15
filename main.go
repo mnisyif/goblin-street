@@ -17,17 +17,20 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mnisyif/goblin-street/internal/goblinapi"
 	"github.com/mnisyif/goblin-street/internal/goblintui"
-	"github.com/mnisyif/goblin-street/internal/goblinengine"
 )
 
 func main() {
-	rows := []goblintui.ModelRow{}
-	history := []string{}
+	rows := []goblintui.ModelRow{
+		{Name: "Cannonball", Buy: 200, Sell: 210, Spread: 10, ROI: 5.0, Volume: 10000},
+	}
+	history := []string{
+		"Bought 10k Cannonball @ 200",
+		"Sold 10k Cannonball @ 210 — profit 90k",
+	}
 
 	userAgent := "goblin-street/v0.1 (github.com/mnisyif/goblin-street; mnisyif@gmail.com)"
 
@@ -44,29 +47,6 @@ func main() {
 	p := tea.NewProgram(goblinTui)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
-
-	// avgPrices, err := goblinClient.FetchLatest()
-	avgPrices, err := goblinClient.Fetch1Hour()
-	if err != nil {
-		fmt.Printf("Could not fetch prices of last hour: %s", err)
 		os.Exit(1)
 	}
-
-	id_int := 10
-	id_str := strconv.Itoa(items[id_int].ID)
-	entry, ok := avgPrices.Data[id_str]
-	if !ok {
-		fmt.Printf("Item %s not traded recently\n", items[id_int].Name)
-		return
-	}
-
-	fmt.Printf("Item: %v\n", entry)
-	profit := goblinengine.ProfitGP(entry.AvgBuy, entry.AvgSell)
-	roi := goblinengine.ROI(entry.AvgBuy, entry.AvgSell)
-	margin := goblinengine.MarginPct(entry.AvgBuy, entry.AvgSell)
-
-	fmt.Printf("Item: %s\n", items[id_int].Name)
-	fmt.Printf("Profit per item: %d gp\n", profit)
-	fmt.Printf("ROI: %.2f%%\n", roi)
-	fmt.Printf("Margin: %.2f%%\n", margin)
 }
