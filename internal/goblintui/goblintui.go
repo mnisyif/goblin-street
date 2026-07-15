@@ -63,7 +63,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "up", "k":
 			if m.Cursor > 0 {
-				m.Cursor++
+				m.Cursor--
 			}
 		case "down", "j":
 			max := len(m.Rows) - 1
