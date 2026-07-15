@@ -55,6 +55,8 @@ func fetchAndCache[T any](gobClient *Client, url string, ttl time.Duration) (T, 
 		return result, err
 	}
 
+	gobClient.cache.Add(url, data, ttl)
+
 	err = json.Unmarshal(data, &result)
 
 	return result, err
