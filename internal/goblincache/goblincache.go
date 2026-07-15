@@ -31,13 +31,13 @@ type Cache struct {
 	mu       *sync.Mutex
 }
 
-func New(interval time.Duration) (*Cache, error) {
+func New(refreshTimer time.Duration) (*Cache, error) {
 	newCache := &Cache{
 		cacheMap: make(map[string]cacheEntry),
 		mu:       &sync.Mutex{},
 	}
 
-	go newCache.reapLoop(interval)
+	go newCache.reapLoop(refreshTimer)
 	return newCache, nil
 }
 
@@ -64,9 +64,9 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return result.val, exists
 }
 
-func (c *Cache) reapLoop(interval time.Duration) {
+func (c *Cache) reapLoop(refreshTimer time.Duration) {
 	for {
-		time.Sleep(interval)
+		time.Sleep(refreshTimer)
 		c.mu.Lock()
 		for key, entry := range c.cacheMap {
 			if time.Since(entry.createdAt) > entry.ttl {
