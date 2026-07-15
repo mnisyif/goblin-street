@@ -15,7 +15,11 @@
 // Package goblintui is implementd to represennt goblin-street in a terminal environment
 package goblintui
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"fmt"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 type ModelRow struct {
 	Name   string
@@ -72,4 +76,41 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 	return m, nil
+}
+
+func (m *Model) View() string {
+	s := "Welcome to Goblin Street, your advisor to immense wealth in gelinor\n\n"
+
+	switch m.ActiveTab {
+	// if tab = 0 -> market
+	case 0:
+		s += " > Market < History  \n"
+
+	// if tab = 1 -> history
+	case 1:
+		s += "   Market > History <\n"
+	}
+
+	s += "------------------------\n"
+
+	if m.ActiveTab == 0 {
+		for i, row := range m.Rows {
+			cursor := " "
+			if m.Cursor == i {
+				cursor = "> "
+			}
+			s += cursor + fmt.Sprintf("%-20s %8d %8d %8d %8f %8d\n", row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
+		}
+	} else {
+		for i, history := range m.History {
+			cursor := " "
+			if m.Cursor == i {
+				cursor = "> "
+			}
+			s += cursor + history + "\n"
+		}
+	}
+
+	s += "\nPress q to quit. Tab to switch views.\n"
+	return s
 }
