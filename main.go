@@ -66,9 +66,9 @@ func main() {
 		})
 	}
 
-	if len(rows) > 100 {
-		rows = rows[:10]
-	}
+	// if len(rows) > 100 {
+	// 	rows = rows[:10]
+	// }
 
 	history := []goblintui.ModelHistory{
 		{Item: "Cannonball", Qty: 10000, BuyPrice: 192, SellPrice: 204, Profit: 98000, Date: "2025-07-14"},
