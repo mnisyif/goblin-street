@@ -28,7 +28,7 @@ import (
 
 func main() {
 	userAgent := "goblin-street/v0.1 (github.com/mnisyif/goblin-street; mnisyif@gmail.com)"
-	newCache, _ := goblincache.New(60 * time.Second)
+	newCache, _ := goblincache.New(30 * time.Second)
 	client := goblinapi.New(userAgent, newCache)
 
 	items, err := client.FetchMappings()
