@@ -22,7 +22,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type ModelRow struct {
+type ModelMarket struct {
 	Name   string
 	Buy    int
 	Sell   int
@@ -38,7 +38,7 @@ type Model struct {
 	History   []string
 }
 
-func New(rows []ModelRow, history []string) *Model {
+func New(rows []ModelMarket, history []string) *Model {
 	return &Model{
 		ActiveTab: 0,
 		Cursor:    0,

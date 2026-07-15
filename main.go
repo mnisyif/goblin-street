@@ -38,7 +38,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var rows []goblintui.ModelRow
+	var rows []goblintui.ModelMarket
 	for _, item := range items {
 		id := strconv.Itoa(item.ID)
 		entry, ok := prices.Data[id]
@@ -53,7 +53,7 @@ func main() {
 		roi := goblinengine.ROI(entry.AvgSell, entry.AvgBuy)
 		volume := entry.BuyVolume + entry.SellVolume
 
-		rows = append(rows, goblintui.ModelRow{
+		rows = append(rows, goblintui.ModelMarket{
 			Name:   item.Name,
 			Buy:    entry.AvgBuy,
 			Sell:   entry.AvgSell,
