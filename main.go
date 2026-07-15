@@ -19,13 +19,20 @@ import (
 	"os"
 	"strconv"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mnisyif/goblin-street/internal/goblinapi"
+	"github.com/mnisyif/goblin-street/internal/goblintui"
 	"github.com/mnisyif/goblin-street/internal/goblinengine"
 )
 
 func main() {
+	rows := []goblintui.ModelRow{}
+	history := []string{}
+
 	userAgent := "goblin-street/v0.1 (github.com/mnisyif/goblin-street; mnisyif@gmail.com)"
+
 	goblinClient := goblinapi.New(userAgent)
+	goblinTui := goblintui.New(rows, history)
 
 	items, err := goblinClient.FetchMappings()
 	if err != nil {
@@ -34,6 +41,9 @@ func main() {
 	}
 
 	fmt.Printf("Item name: %s\n", items[0].Name)
+	p := tea.NewProgram(goblinTui)
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Alas, there's been an error: %v", err)
 
 	// avgPrices, err := goblinClient.FetchLatest()
 	avgPrices, err := goblinClient.Fetch1Hour()
