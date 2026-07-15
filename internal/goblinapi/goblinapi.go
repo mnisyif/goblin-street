@@ -20,9 +20,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
-func fetch[T any](gobClient *Client, url string) (T, error) {
+func fetchAndCache[T any](gobClient *Client, url string, ttl time.Duration) (T, error) {
 	var result T
 
 	cached, exists := gobClient.cache.Get(url)
@@ -62,23 +63,23 @@ func fetch[T any](gobClient *Client, url string) (T, error) {
 func (c *Client) FetchMappings() ([]Item, error) {
 	url := fmt.Sprintf("%s/mapping", baseURL)
 
-	return fetch[[]Item](c, url)
+	return fetchAndCache[[]Item](c, url, 30*time.Minute)
 }
 
 func (c *Client) FetchLatest() (LatestPrices, error) {
 	url := fmt.Sprintf("%s/latest", baseURL)
 
-	return fetch[LatestPrices](c, url)
+	return fetchAndCache[LatestPrices](c, url, 60*time.Second)
 }
 
 func (c *Client) Fetch5Min() (AveragePrices, error) {
 	url := fmt.Sprintf("%s/5m", baseURL)
 
-	return fetch[AveragePrices](c, url)
+	return fetchAndCache[AveragePrices](c, url, 5*time.Minute)
 }
 
 func (c *Client) Fetch1Hour() (AveragePrices, error) {
 	url := fmt.Sprintf("%s/1h", baseURL)
 
-	return fetch[AveragePrices](c, url)
+	return fetchAndCache[AveragePrices](c, url, 1*time.Hour)
 }
