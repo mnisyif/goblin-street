@@ -17,6 +17,7 @@ package goblintui
 
 import (
 	"fmt"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -80,26 +81,32 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m *Model) View() string {
 	s := "Welcome to Goblin Street, your advisor to immense wealth in gelinor\n\n"
+	tabBar := " "
+	tableWidth := 70 // 2(cursor) + 22(name) + 8(buy) + 8(sell) + 8(spread) + 8(roi%) + 8(volume)
+	padding := 0
 
 	switch m.ActiveTab {
 	// if tab = 0 -> market
 	case 0:
-		s += " > Market < History  \n"
-
+		tabBar = "> Market < History  "
 	// if tab = 1 -> history
 	case 1:
-		s += "   Market > History <\n"
+		tabBar = "  Market > History <"
 	}
 
-	s += "------------------------\n"
+	padding = (tableWidth - len(tabBar)) / 2
+	s += strings.Repeat(" ", padding) + tabBar + "\n"
+	s += strings.Repeat("-", tableWidth) + "\n"
 
 	if m.ActiveTab == 0 {
+		s += fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
 		for i, row := range m.Rows {
 			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += fmt.Sprintf("%s %-20s %8d %8d %8d %8f %8d\n", cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
+			s += fmt.Sprintf("%2s %-22s %8d %8d %8d %7.1f%% %8d\n",
+				cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
 		}
 	} else {
 		for i, history := range m.History {
@@ -107,10 +114,10 @@ func (m *Model) View() string {
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += fmt.Sprintf("%s %s\n", cursor, history)
+			s += fmt.Sprintf("  %s %s\n", cursor, history)
 		}
 	}
 
-	s += "\nPress q to quit. Tab to switch views.\n"
+	s += " \nPress q to quit. Tab to switch views.\n"
 	return s
 }
