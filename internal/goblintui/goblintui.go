@@ -38,6 +38,9 @@ func (m *Model) Init() tea.Cmd {
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.WindowHeight = msg.Height
+
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q":
@@ -48,16 +51,25 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Cursor = 0
 
 		case "up", "k":
+			// visibleRows := m.WindowHeight - 7
 			if m.Cursor > 0 {
 				m.Cursor--
 			}
+			if m.Cursor < m.ScrollOffset {
+				m.ScrollOffset--
+			}
+
 		case "down", "j":
+			visibleRows := m.WindowHeight - 7
 			max := len(m.Rows) - 1
 			if m.ActiveTab == 1 {
 				max = len(m.History) - 1
 			}
 			if m.Cursor < max {
 				m.Cursor++
+			}
+			if m.Cursor-m.ScrollOffset >= visibleRows {
+				m.ScrollOffset++
 			}
 		}
 	}
