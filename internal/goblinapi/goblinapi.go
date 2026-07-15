@@ -25,6 +25,12 @@ import (
 func fetch[T any](gobClient *Client, url string) (T, error) {
 	var result T
 
+	cached, exists := gobClient.cache.Get(url)
+	if exists {
+		err := json.Unmarshal(cached, &result)
+		return result, err
+	}
+
 	req, err := http.NewRequestWithContext(gobClient.ctx, "GET", url, nil)
 	if err != nil {
 		return result, err

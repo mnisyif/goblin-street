@@ -17,18 +17,22 @@ package goblinapi
 import (
 	"context"
 	"net/http"
+
+	"github.com/mnisyif/goblin-street/internal/goblincache"
 )
 
 type Client struct {
 	httpClient http.Client
 	userAgent  string
 	ctx        context.Context
+	cache      *goblincache.Cache
 }
 
-func New(userAgent string) *Client {
+func New(userAgent string, newCache *goblincache.Cache) *Client {
 	return &Client{
 		httpClient: http.Client{},
 		userAgent:  userAgent,
 		ctx:        context.Background(),
+		cache:      newCache,
 	}
 }
