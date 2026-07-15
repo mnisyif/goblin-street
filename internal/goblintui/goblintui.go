@@ -47,9 +47,23 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "tab":
-			m.ActiveTab = 1 - m.ActiveTab
-			m.Cursor = 0
+			if m.ActiveTab == 0 {
+				m.MarketCursor = m.Cursor
+				m.MarketOffset = m.ScrollOffset
+			} else {
+				m.HistoryCursor = m.Cursor
+				m.HistoryOffset = m.ScrollOffset
+			}
 
+			m.ActiveTab = 1 - m.ActiveTab
+
+			if m.ActiveTab == 0 {
+				m.Cursor = m.MarketCursor
+				m.ScrollOffset = m.MarketOffset
+			} else {
+				m.Cursor = m.HistoryCursor
+				m.ScrollOffset = m.HistoryOffset
+			}
 		case "up", "k":
 			// visibleRows := m.WindowHeight - 7
 			if m.Cursor > 0 {
@@ -97,7 +111,19 @@ func (m *Model) View() string {
 
 	if m.ActiveTab == 0 {
 		s += fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
-		for i, row := range m.Rows {
+		visibleRows := m.WindowHeight - 7
+		if visibleRows < 1 {
+			visibleRows = 1
+		}
+		start := m.ScrollOffset
+		end := start + visibleRows
+		if end > len(m.Rows) {
+			end = len(m.Rows)
+		}
+
+		for i := start; i < end; i++ {
+			row := m.Rows[i]
+			// for i, row := range m.Rows {
 			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "

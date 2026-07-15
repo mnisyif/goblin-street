@@ -33,10 +33,14 @@ type ModelHistory struct {
 }
 
 type Model struct {
-	ActiveTab    int
-	Cursor       int
-	ScrollOffset int
-	WindowHeight int
-	Rows         []ModelMarket
-	History      []ModelHistory
+	ActiveTab     int
+	Cursor        int
+	ScrollOffset  int
+	WindowHeight  int
+	Rows          []ModelMarket
+	History       []ModelHistory
+	MarketCursor  int
+	MarketOffset  int
+	HistoryCursor int
+	HistoryOffset int
 }
