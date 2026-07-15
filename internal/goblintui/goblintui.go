@@ -22,7 +22,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func New(rows []ModelMarket, history []string) *Model {
+func New(rows []ModelMarket, history []ModelHistory) *Model {
 	return &Model{
 		ActiveTab:    0,
 		Cursor:       0,

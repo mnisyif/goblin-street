@@ -38,5 +38,5 @@ type Model struct {
 	ScrollOffset int
 	WindowHeight int
 	Rows         []ModelMarket
-	History      []string
+	History      []ModelHistory
 }
