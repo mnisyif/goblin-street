@@ -17,16 +17,19 @@ package main
 import (
 	"os"
 	"strconv"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mnisyif/goblin-street/internal/goblinapi"
+	"github.com/mnisyif/goblin-street/internal/goblincache"
 	"github.com/mnisyif/goblin-street/internal/goblinengine"
 	"github.com/mnisyif/goblin-street/internal/goblintui"
 )
 
 func main() {
 	userAgent := "goblin-street/v0.1 (github.com/mnisyif/goblin-street; mnisyif@gmail.com)"
-	client := goblinapi.New(userAgent)
+	newCache, _ := goblincache.New(60 * time.Second)
+	client := goblinapi.New(userAgent, newCache)
 
 	items, err := client.FetchMappings()
 	if err != nil {
