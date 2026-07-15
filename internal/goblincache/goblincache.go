@@ -23,6 +23,7 @@ import (
 type cacheEntry struct {
 	createdAt time.Time
 	val       []byte
+	ttl       time.Duration
 }
 
 type Cache struct {
@@ -40,13 +41,14 @@ func New(interval time.Duration) (*Cache, error) {
 	return newCache, nil
 }
 
-func (c *Cache) Add(key string, val []byte) error {
+func (c *Cache) Add(key string, val []byte, ttl time.Duration) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
 	newEntry := cacheEntry{
 		createdAt: time.Now(),
 		val:       val,
+		ttl:       ttl,
 	}
 	c.cacheMap[key] = newEntry
 
@@ -67,7 +69,7 @@ func (c *Cache) reapLoop(interval time.Duration) {
 		time.Sleep(interval)
 		c.mu.Lock()
 		for key, entry := range c.cacheMap {
-			if time.Since(entry.createdAt) > interval {
+			if time.Since(entry.createdAt) > entry.ttl {
 				delete(c.cacheMap, key)
 			}
 		}
