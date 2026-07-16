@@ -53,7 +53,7 @@ func main() {
 		}
 
 		spread := entry.AvgBuy - entry.AvgSell
-		roi := goblinengine.ROI(entry.AvgSell, entry.AvgBuy)
+		roi := goblinengine.ROI(entry.AvgBuy, entry.AvgSell)
 		volume := entry.BuyVolume + entry.SellVolume
 
 		rows = append(rows, goblintui.ModelMarket{
