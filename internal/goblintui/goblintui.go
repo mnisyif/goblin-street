@@ -113,23 +113,13 @@ func (m *Model) View() string {
 
 	if m.ActiveTab == 0 {
 		header := fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
-		s += m.renderTable(len(m.Rows), header, func(i int) string {
-			cursor := "  "
-			if m.Cursor == i {
-				cursor = "> "
-			}
-
+		s += m.renderTable(len(m.Rows), header, func(i int, cursor string) string {
 			row := m.Rows[i]
 			return fmt.Sprintf(marketRow, cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
 		})
 	} else {
 		header := fmt.Sprintf("%2s %-16s %8s %8s %8s %10s %12s\n", "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
-		s += m.renderTable(len(m.History), header, func(i int) string {
-			cursor := "  "
-			if m.Cursor == i {
-				cursor = "> "
-			}
-
+		s += m.renderTable(len(m.History), header, func(i int, cursor string) string {
 			entry := m.History[i]
 			return fmt.Sprintf(historyRow, cursor, entry.Item, entry.Qty, entry.BuyPrice, entry.SellPrice, entry.Profit, entry.Date)
 		})
@@ -140,7 +130,7 @@ func (m *Model) View() string {
 	return s
 }
 
-func (m *Model) renderTable(items int, header string, rowEntryFn func(i int) string) string {
+func (m *Model) renderTable(items int, header string, rowEntryFn func(i int, cursor string) string) string {
 	visibleRows := m.WindowHeight - 7
 	if visibleRows < 1 {
 		visibleRows = 1
@@ -154,6 +144,10 @@ func (m *Model) renderTable(items int, header string, rowEntryFn func(i int) str
 	s.WriteByte('\n')
 
 	for i := start; i < end; i++ {
+		cursor := "  "
+		if m.Cursor == i {
+			cursor = "> "
+		}
 
 		s.WriteString(rowEntryFn(i, cursor))
 	}
