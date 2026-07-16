@@ -132,9 +132,8 @@ func (m *Model) View() string {
 
 func (m *Model) renderTable(items int, header string, rowEntryFn func(i int, cursor string) string) string {
 	visibleRows := m.WindowHeight - 7
-	if visibleRows < 1 {
-		visibleRows = 1
-	}
+	visibleRows = max(visibleRows, 1)
+
 	start := m.ScrollOffset
 	end := start + visibleRows
 	end = min(end, items)
