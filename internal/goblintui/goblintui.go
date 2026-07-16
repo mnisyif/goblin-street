@@ -75,10 +75,14 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "down", "j":
 			visibleRows := m.WindowHeight - 7
-			max := len(m.Rows) - 1
-			if m.ActiveTab == 1 {
+
+			max := 0
+			if m.ActiveTab == 0 {
+				max = len(m.Rows) - 1
+			} else {
 				max = len(m.History) - 1
 			}
+
 			if m.Cursor < max {
 				m.Cursor++
 			}
