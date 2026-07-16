@@ -108,17 +108,19 @@ func (m *Model) View() string {
 	padding = (tableWidth - len(tabBar)) / 2
 	s += strings.Repeat(" ", padding) + tabBar + "\n"
 	s += strings.Repeat("-", tableWidth) + "\n"
+	marketHeader := "%2s %-22s %8s %8s %8s %8s %8s\n"
 	marketRow := "%2s %-22s %8d %8d %8d %7.1f%% %8d\n"
+	historyHeader := "%2s %-16s %8s %8s %8s %10s %12s\n"
 	historyRow := "%2s %-16s %8d %8d %8d %10d %12s\n"
 
 	if m.ActiveTab == 0 {
-		header := fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
+		header := fmt.Sprintf(marketHeader, "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
 		s += m.renderTable(len(m.Rows), header, func(i int, cursor string) string {
 			row := m.Rows[i]
 			return fmt.Sprintf(marketRow, cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
 		})
 	} else {
-		header := fmt.Sprintf("%2s %-16s %8s %8s %8s %10s %12s\n", "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
+		header := fmt.Sprintf(historyHeader, "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
 		s += m.renderTable(len(m.History), header, func(i int, cursor string) string {
 			entry := m.History[i]
 			return fmt.Sprintf(historyRow, cursor, entry.Item, entry.Qty, entry.BuyPrice, entry.SellPrice, entry.Profit, entry.Date)
