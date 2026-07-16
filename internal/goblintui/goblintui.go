@@ -131,7 +131,7 @@ func (m *Model) View() string {
 		})
 	}
 
-	s += " \nPress q to quit. Tab to switch views.\n"
+	s += "\nPress q to quit. Tab to switch views.\n"
 
 	return s
 }
