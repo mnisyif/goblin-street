@@ -149,10 +149,14 @@ func (m *Model) renderTable(items int, header string, rowEntryFn func(i int) str
 	end := start + visibleRows
 	end = min(end, items)
 
-	s := header + "\n"
+	var s strings.Builder
+	s.WriteString(header)
+	s.WriteByte('\n')
+
 	for i := start; i < end; i++ {
-		s += rowEntryFn(i)
+
+		s.WriteString(rowEntryFn(i, cursor))
 	}
 
-	return s
+	return s.String()
 }
