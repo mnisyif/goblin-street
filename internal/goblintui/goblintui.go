@@ -108,40 +108,51 @@ func (m *Model) View() string {
 	padding = (tableWidth - len(tabBar)) / 2
 	s += strings.Repeat(" ", padding) + tabBar + "\n"
 	s += strings.Repeat("-", tableWidth) + "\n"
+	marketRow := "%2s %-22s %8d %8d %8d %7.1f%% %8d\n"
+	historyRow := "%2s %-16s %8d %8d %8d %10d %12s\n"
 
 	if m.ActiveTab == 0 {
-		s += fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
-		visibleRows := m.WindowHeight - 7
-		if visibleRows < 1 {
-			visibleRows = 1
-		}
-		start := m.ScrollOffset
-		end := start + visibleRows
-		if end > len(m.Rows) {
-			end = len(m.Rows)
-		}
+		header := fmt.Sprintf("%2s %-22s %8s %8s %8s %8s %8s\n", "", "Name", "Buy", "Sell", "Spread", "ROI%", "Volume")
+		s += m.renderTable(len(m.Rows), header, func(i int) string {
+			cursor := "  "
+			if m.Cursor == i {
+				cursor = "> "
+			}
 
-		for i := start; i < end; i++ {
 			row := m.Rows[i]
-			// for i, row := range m.Rows {
-			cursor := "  "
-			if m.Cursor == i {
-				cursor = "> "
-			}
-			s += fmt.Sprintf("%2s %-22s %8d %8d %8d %7.1f%% %8d\n",
-				cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
-		}
+			return fmt.Sprintf(marketRow, cursor, row.Name, row.Buy, row.Sell, row.Spread, row.ROI, row.Volume)
+		})
 	} else {
-		s += fmt.Sprintf("%2s %-16s %8s %8s %8s %10s %12s\n", "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
-		for i, entry := range m.History {
+		header := fmt.Sprintf("%2s %-16s %8s %8s %8s %10s %12s\n", "", "Item", "Qty", "Buy", "Sell", "Profit", "Date")
+		s += m.renderTable(len(m.History), header, func(i int) string {
 			cursor := "  "
 			if m.Cursor == i {
 				cursor = "> "
 			}
-			s += fmt.Sprintf("%2s %-16s %8d %8d %8d %10d %12s\n", cursor, entry.Item, entry.Qty, entry.BuyPrice, entry.SellPrice, entry.Profit, entry.Date)
-		}
+
+			entry := m.History[i]
+			return fmt.Sprintf(historyRow, cursor, entry.Item, entry.Qty, entry.BuyPrice, entry.SellPrice, entry.Profit, entry.Date)
+		})
 	}
 
 	s += " \nPress q to quit. Tab to switch views.\n"
+
+	return s
+}
+
+func (m *Model) renderTable(items int, header string, rowEntryFn func(i int) string) string {
+	visibleRows := m.WindowHeight - 7
+	if visibleRows < 1 {
+		visibleRows = 1
+	}
+	start := m.ScrollOffset
+	end := start + visibleRows
+	end = min(end, items)
+
+	s := header + "\n"
+	for i := start; i < end; i++ {
+		s += rowEntryFn(i)
+	}
+
 	return s
 }
